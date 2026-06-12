@@ -59,10 +59,11 @@ export function PlayPage({ data }: PlayPageProps) {
             画像として保存
           </button>
           <button type="button" onClick={handleShareResult}>
-            {copied ? "コピーしました" : "結果を共有"}
+            結果を共有
           </button>
         </div>
       )}
+      {copied && <p className="copy-feedback">コピーしました</p>}
     </div>
   );
 }

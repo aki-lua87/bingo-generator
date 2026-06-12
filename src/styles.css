@@ -36,21 +36,6 @@ body {
   gap: 4px;
 }
 
-.align-picker {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-}
-
-.align-picker label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 14px;
-  gap: 4px;
-}
-
 .actions {
   display: flex;
   gap: 8px;
@@ -71,15 +56,8 @@ button:hover {
   background: #eee;
 }
 
-.share-url {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  max-width: 500px;
-}
-
-.share-url input {
-  flex: 1;
-  padding: 6px;
-  font-size: 12px;
+.copy-feedback {
+  margin: 0;
+  font-size: 14px;
+  color: #2a7;
 }
