@@ -1,5 +1,10 @@
 import { toPng } from "html-to-image";
 
+/** 共有テキスト(タイトル+URL)を組み立てる。Web Share APIのtext/urlとクリップボードコピーで共通利用する */
+export function buildShareText(title: string, url: string): string {
+  return `${title}\n${url}`;
+}
+
 async function elementToPngFile(element: HTMLElement, fileName: string): Promise<File> {
   const dataUrl = await toPng(element, { pixelRatio: 2 });
   const blob = await (await fetch(dataUrl)).blob();

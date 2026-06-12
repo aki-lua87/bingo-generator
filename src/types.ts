@@ -1,6 +1,7 @@
 export const GRID_SIZE = 5;
 export const CENTER_INDEX = 12;
 export const CELL_COUNT = GRID_SIZE * GRID_SIZE - 1; // 24 (中央のワイルドカードを除く)
+export const MARK_COUNT = GRID_SIZE * GRID_SIZE; // 25 (中央のワイルドカードを含む)
 export const MAX_CELL_LENGTH = 30;
 export const MAX_TITLE_LENGTH = 30;
 
@@ -26,7 +27,7 @@ export interface BingoData {
   cells: string[]; // length 24
   centerText: string;
   colors: BingoColors;
-  marks?: boolean[]; // length 24, プレイ結果共有時のみ使用
+  marks?: boolean[]; // length 25 (グリッド位置順、中央を含む), プレイ結果共有時のみ使用
 }
 
 /** グリッド上の位置(0-24)からcells配列のインデックスを返す。中央(12)はnull */

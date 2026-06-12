@@ -5,6 +5,7 @@ import {
   DEFAULT_CENTER_TEXT,
   DEFAULT_COLORS,
   DEFAULT_TITLE,
+  MARK_COUNT,
   MAX_CELL_LENGTH,
   MAX_TITLE_LENGTH,
 } from "../types";
@@ -19,7 +20,7 @@ interface EncodedPayload {
   border?: string;
   text?: string;
   mark?: string;
-  mk?: string; // marks ("0"/"1" を24文字、結果共有時のみ)
+  mk?: string; // marks ("0"/"1" を25文字(中央含む)、結果共有時のみ)
 }
 
 export function encodeBingoData(data: BingoData): string {
@@ -56,7 +57,7 @@ export function decodeBingoData(encoded: string): BingoData | null {
 
     let marks: boolean[] | undefined;
     if (typeof payload.mk === "string") {
-      if (payload.mk.length !== CELL_COUNT || !/^[01]+$/.test(payload.mk)) return null;
+      if (payload.mk.length !== MARK_COUNT || !/^[01]+$/.test(payload.mk)) return null;
       marks = payload.mk.split("").map((c) => c === "1");
     }
 

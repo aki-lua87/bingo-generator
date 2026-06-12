@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { BingoGrid } from "../components/BingoGrid";
 import { buildShareUrl } from "../utils/encode";
-import { exportElementAsImage, shareResultWithImage } from "../utils/image";
-import { BingoData, CELL_COUNT } from "../types";
+import { buildShareText, exportElementAsImage, shareResultWithImage } from "../utils/image";
+import { BingoData, MARK_COUNT } from "../types";
 
 interface PlayPageProps {
   data: BingoData;
@@ -10,16 +10,22 @@ interface PlayPageProps {
 
 export function PlayPage({ data }: PlayPageProps) {
   const isResult = !!data.marks;
-  const [marks, setMarks] = useState<boolean[]>(() => data.marks ?? Array(CELL_COUNT).fill(false));
+  const [marks, setMarks] = useState<boolean[]>(() => data.marks ?? Array(MARK_COUNT).fill(false));
   const [copied, setCopied] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const handleCellTap = (cellIndex: number) => {
+  const handleCellTap = (gridIndex: number) => {
     setMarks((prev) => {
       const next = [...prev];
-      next[cellIndex] = !next[cellIndex];
+      next[gridIndex] = !next[gridIndex];
       return next;
     });
+  };
+
+  const handlePlayThis = () => {
+    const url = buildShareUrl({ ...data, marks: undefined });
+    window.location.hash = new URL(url).hash;
+    window.location.reload();
   };
 
   const handleExportImage = () => {
@@ -36,7 +42,7 @@ export function PlayPage({ data }: PlayPageProps) {
       if (shared) return;
     }
 
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(buildShareText(data.title, url));
     setCopied(true);
   };
 
@@ -53,7 +59,13 @@ export function PlayPage({ data }: PlayPageProps) {
         onCellTap={handleCellTap}
       />
 
-      {!isResult && (
+      {isResult ? (
+        <div className="actions">
+          <button type="button" onClick={handlePlayThis}>
+            このビンゴで遊ぶ
+          </button>
+        </div>
+      ) : (
         <div className="actions">
           <button type="button" onClick={handleExportImage}>
             画像として保存

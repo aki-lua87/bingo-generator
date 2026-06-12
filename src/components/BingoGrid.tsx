@@ -8,11 +8,11 @@ interface BingoGridProps {
   centerText: string;
   colors: BingoColors;
   mode: "edit" | "play" | "result";
-  marks?: boolean[]; // length 24, play/resultモードのみ使用
+  marks?: boolean[]; // length 25 (グリッド位置順、中央を含む), play/resultモードのみ使用
   onTitleChange?: (value: string) => void;
   onCenterTextChange?: (value: string) => void;
   onCellChange?: (cellIndex: number, value: string) => void;
-  onCellTap?: (cellIndex: number) => void;
+  onCellTap?: (gridIndex: number) => void;
 }
 
 // テキストの高さに合わせて自動でリサイズし、セル内で縦中央に表示されるようにする
@@ -74,6 +74,8 @@ export const BingoGrid = forwardRef<HTMLDivElement, BingoGridProps>(
           {gridPositions.map((gridIndex) => {
             const cellIndex = gridIndexToCellIndex(gridIndex);
 
+            const marked = marks?.[gridIndex] ?? false;
+
             if (cellIndex === null) {
               if (mode === "edit") {
                 return (
@@ -88,16 +90,21 @@ export const BingoGrid = forwardRef<HTMLDivElement, BingoGridProps>(
                 );
               }
               return (
-                <div key={gridIndex} className="bingo-cell bingo-cell-wild" style={{ borderColor: `#${colors.border}` }}>
+                <div
+                  key={gridIndex}
+                  className={mode === "play" ? "bingo-cell bingo-cell-wild bingo-cell-play" : "bingo-cell bingo-cell-wild"}
+                  style={{ borderColor: `#${colors.border}` }}
+                  onClick={mode === "play" ? () => onCellTap?.(gridIndex) : undefined}
+                >
                   <span className="bingo-cell-text" style={{ fontSize: dynamicFontSize(centerText) }}>
                     {centerText}
                   </span>
+                  {marked && <span className="bingo-cell-mark" style={{ borderColor: `#${colors.mark}` }} />}
                 </div>
               );
             }
 
             const value = cells[cellIndex] ?? "";
-            const marked = marks?.[cellIndex] ?? false;
 
             if (mode === "edit") {
               return (
@@ -117,7 +124,7 @@ export const BingoGrid = forwardRef<HTMLDivElement, BingoGridProps>(
                 key={gridIndex}
                 className={mode === "play" ? "bingo-cell bingo-cell-play" : "bingo-cell"}
                 style={{ borderColor: `#${colors.border}` }}
-                onClick={mode === "play" ? () => onCellTap?.(cellIndex) : undefined}
+                onClick={mode === "play" ? () => onCellTap?.(gridIndex) : undefined}
               >
                 <span className="bingo-cell-text" style={{ fontSize: dynamicFontSize(value) }}>
                   {value}

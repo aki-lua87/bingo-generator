@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { BingoGrid } from "../components/BingoGrid";
 import { ColorPicker } from "../components/ColorPicker";
 import { buildShareUrl } from "../utils/encode";
-import { exportElementAsImage, shareResultWithImage } from "../utils/image";
+import { buildShareText, exportElementAsImage, shareResultWithImage } from "../utils/image";
 import { BingoColors, CELL_COUNT, DEFAULT_CENTER_TEXT, DEFAULT_COLORS, DEFAULT_TITLE } from "../types";
 
 export function CreatePage() {
@@ -29,7 +29,7 @@ export function CreatePage() {
       if (shared) return;
     }
 
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(buildShareText(title, url));
     setCopied(true);
   };
 
@@ -41,9 +41,7 @@ export function CreatePage() {
 
   return (
     <div className="page">
-      <h1>実績ビンゴをつくる</h1>
-      <p>各マスに実績を入力してください</p>
-
+      <h1>ビンゴをつくる</h1>
       <BingoGrid
         ref={gridRef}
         title={title}
