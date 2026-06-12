@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/components/bingogrid.tsx","./src/components/colorpicker.tsx","./src/pages/createpage.tsx","./src/pages/errorview.tsx","./src/pages/playpage.tsx","./src/utils/encode.ts","./src/utils/image.ts"],"version":"5.9.3"}
