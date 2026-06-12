@@ -42,7 +42,7 @@ export function CreatePage() {
   return (
     <div className="page">
       <h1>実績ビンゴをつくる</h1>
-      <p>各マスに実績を入力してください(中央はワイルドカードです)。</p>
+      <p>各マスに実績を入力してください</p>
 
       <BingoGrid
         ref={gridRef}

@@ -37,9 +37,16 @@ export async function shareResultWithImage(
 
   try {
     const file = await elementToPngFile(element, fileName);
-    const shareData = { files: [file], url, text: title };
-    if (navigator.canShare(shareData)) {
-      await navigator.share(shareData);
+    const shareDataWithImage = { files: [file], url, text: title };
+    if (navigator.canShare(shareDataWithImage)) {
+      await navigator.share(shareDataWithImage);
+      return true;
+    }
+
+    // 画像付き共有に対応していない場合は、URL+テキストのみで共有する
+    const shareDataTextOnly = { url, text: title };
+    if (navigator.canShare(shareDataTextOnly)) {
+      await navigator.share(shareDataTextOnly);
       return true;
     }
   } catch (e) {
