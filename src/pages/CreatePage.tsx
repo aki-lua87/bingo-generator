@@ -23,13 +23,14 @@ export function CreatePage() {
 
   const handleShareLink = async () => {
     const url = buildShareUrl({ title, cells, centerText, colors });
+    const message = `${title}で遊んでみよう！`;
 
     if (gridRef.current) {
-      const shared = await shareResultWithImage(gridRef.current, "bingo.png", url, title);
+      const shared = await shareResultWithImage(gridRef.current, "bingo.png", url, message);
       if (shared) return;
     }
 
-    await navigator.clipboard.writeText(buildShareText(title, url));
+    await navigator.clipboard.writeText(buildShareText(message, url));
     setCopied(true);
   };
 

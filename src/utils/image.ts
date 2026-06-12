@@ -1,8 +1,8 @@
 import { toPng } from "html-to-image";
 
-/** 共有テキスト(タイトル+URL)を組み立てる。Web Share APIのtext/urlとクリップボードコピーで共通利用する */
-export function buildShareText(title: string, url: string): string {
-  return `${title}\n${url}`;
+/** 共有テキスト(メッセージ+URL)を組み立てる。Web Share APIのtext/urlとクリップボードコピーで共通利用する */
+export function buildShareText(message: string, url: string): string {
+  return `${message}\n${url}`;
 }
 
 async function elementToPngFile(element: HTMLElement, fileName: string): Promise<File> {
@@ -36,20 +36,20 @@ export async function shareResultWithImage(
   element: HTMLElement,
   fileName: string,
   url: string,
-  title: string
+  message: string
 ): Promise<boolean> {
   if (!navigator.canShare || !navigator.share) return false;
 
   try {
     const file = await elementToPngFile(element, fileName);
-    const shareDataWithImage = { files: [file], url, text: title };
+    const shareDataWithImage = { files: [file], url, text: message };
     if (navigator.canShare(shareDataWithImage)) {
       await navigator.share(shareDataWithImage);
       return true;
     }
 
     // 画像付き共有に対応していない場合は、URL+テキストのみで共有する
-    const shareDataTextOnly = { url, text: title };
+    const shareDataTextOnly = { url, text: message };
     if (navigator.canShare(shareDataTextOnly)) {
       await navigator.share(shareDataTextOnly);
       return true;

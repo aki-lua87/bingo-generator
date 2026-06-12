@@ -36,13 +36,14 @@ export function PlayPage({ data }: PlayPageProps) {
 
   const handleShareResult = async () => {
     const url = buildShareUrl({ ...data, marks });
+    const message = `${data.title}で遊んだよ！`;
 
     if (gridRef.current) {
-      const shared = await shareResultWithImage(gridRef.current, "bingo-result.png", url, data.title);
+      const shared = await shareResultWithImage(gridRef.current, "bingo-result.png", url, message);
       if (shared) return;
     }
 
-    await navigator.clipboard.writeText(buildShareText(data.title, url));
+    await navigator.clipboard.writeText(buildShareText(message, url));
     setCopied(true);
   };
 
