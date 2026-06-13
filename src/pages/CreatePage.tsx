@@ -35,8 +35,8 @@ export function CreatePage() {
       return;
     }
 
-    await navigator.clipboard.writeText(url);
-    setCopyMessage("URLをコピーしました");
+    await navigator.clipboard.writeText(buildShareText(message, url));
+    setCopyMessage("コピーしました");
   };
 
   const handleExportImage = () => {

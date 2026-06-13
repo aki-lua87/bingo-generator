@@ -1,8 +1,11 @@
 import { toPng } from "html-to-image";
 
-/** 共有テキスト(メッセージ+URL)を組み立てる。Web Share APIのtext/urlとクリップボードコピーで共通利用する */
+/** 共有時に付与するハッシュタグ */
+export const SHARE_HASHTAG = "#実績ビンゴジェネレーター";
+
+/** 共有テキスト(メッセージ+ハッシュタグ+URL)を組み立てる。Web Share APIのtext/urlとクリップボードコピーで共通利用する */
 export function buildShareText(message: string, url: string): string {
-  return `${message}\n${url}`;
+  return `${message} ${SHARE_HASHTAG}\n${url}`;
 }
 
 /** スマートフォン/タブレットかどうかを判定する。PCではURL共有を優先するために使う */
