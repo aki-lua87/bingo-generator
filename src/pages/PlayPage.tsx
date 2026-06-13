@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { BingoGrid } from "../components/BingoGrid";
 import { buildShareUrl } from "../utils/encode";
-import { buildShareText, exportElementAsImage, shareResultWithImage } from "../utils/image";
+import { buildShareText, exportElementAsImage, isMobileDevice, shareResultWithImage } from "../utils/image";
 import { BingoData, MARK_COUNT } from "../types";
 
 interface PlayPageProps {
@@ -11,7 +11,7 @@ interface PlayPageProps {
 export function PlayPage({ data }: PlayPageProps) {
   const isResult = !!data.marks;
   const [marks, setMarks] = useState<boolean[]>(() => data.marks ?? Array(MARK_COUNT).fill(false));
-  const [copied, setCopied] = useState(false);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleCellTap = (gridIndex: number) => {
@@ -28,6 +28,11 @@ export function PlayPage({ data }: PlayPageProps) {
     window.location.reload();
   };
 
+  const handleOpenThisInNewTab = () => {
+    const url = buildShareUrl({ ...data, marks: undefined });
+    window.open(url, "_blank", "noopener");
+  };
+
   const handleExportImage = () => {
     if (gridRef.current) {
       void exportElementAsImage(gridRef.current, "bingo-result.png");
@@ -38,13 +43,18 @@ export function PlayPage({ data }: PlayPageProps) {
     const url = buildShareUrl({ ...data, marks });
     const message = `${data.title}で遊んだよ！`;
 
-    if (gridRef.current) {
-      const shared = await shareResultWithImage(gridRef.current, "bingo-result.png", url, message);
-      if (shared) return;
+    if (isMobileDevice()) {
+      if (gridRef.current) {
+        const shared = await shareResultWithImage(gridRef.current, "bingo-result.png", url, message);
+        if (shared) return;
+      }
+      await navigator.clipboard.writeText(buildShareText(message, url));
+      setCopyMessage("コピーしました");
+      return;
     }
 
-    await navigator.clipboard.writeText(buildShareText(message, url));
-    setCopied(true);
+    await navigator.clipboard.writeText(url);
+    setCopyMessage("URLをコピーしました");
   };
 
   return (
@@ -65,6 +75,9 @@ export function PlayPage({ data }: PlayPageProps) {
           <button type="button" onClick={handlePlayThis}>
             このビンゴで遊ぶ
           </button>
+          <button type="button" onClick={handleOpenThisInNewTab}>
+            このビンゴを別タブで開く
+          </button>
         </div>
       ) : (
         <div className="actions">
@@ -76,7 +89,7 @@ export function PlayPage({ data }: PlayPageProps) {
           </button>
         </div>
       )}
-      {copied && <p className="copy-feedback">コピーしました</p>}
+      {copyMessage && <p className="copy-feedback">{copyMessage}</p>}
     </div>
   );
 }

@@ -5,6 +5,11 @@ export function buildShareText(message: string, url: string): string {
   return `${message}\n${url}`;
 }
 
+/** スマートフォン/タブレットかどうかを判定する。PCではURL共有を優先するために使う */
+export function isMobileDevice(): boolean {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 async function elementToPngFile(element: HTMLElement, fileName: string): Promise<File> {
   const dataUrl = await toPng(element, { pixelRatio: 2 });
   const blob = await (await fetch(dataUrl)).blob();

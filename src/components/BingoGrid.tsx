@@ -99,12 +99,7 @@ export const BingoGrid = forwardRef<HTMLDivElement, BingoGridProps>(
                   <span className="bingo-cell-text" style={{ fontSize: dynamicFontSize(centerText) }}>
                     {centerText}
                   </span>
-                  {marked && (
-                    <span
-                      className="bingo-cell-mark"
-                      style={{ borderColor: `#${colors.mark}`, backgroundColor: `#${colors.mark}` }}
-                    />
-                  )}
+                  {marked && <span className="bingo-cell-mark" style={{ borderColor: `#${colors.mark}` }} />}
                 </div>
               );
             }
